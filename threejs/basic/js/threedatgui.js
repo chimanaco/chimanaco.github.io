@@ -26,9 +26,9 @@ function setupGUI() {
 	var fov = gui.add( params, 'fov', 0, 180).name('field of view');
 	// var near = gui.add( params, 'near', -10, 10).name('near');
 	// var far = gui.add( params, 'far', -20000, 20000).name('far');
-	var cameraX = gui.add( params, 'cameraX', -2500, 2500 ).name('camera X');
-	var cameraY = gui.add( params, 'cameraY', -2500, 2500 ).name('camera Y');
-	var cameraZ = gui.add( params, 'cameraZ', -5000, 5000 ).name('camera Z');
+	var cameraX = gui.add( params, 'cameraX', -2500, 2500 ).name('cameraX');
+	var cameraY = gui.add( params, 'cameraY', -2500, 2500 ).name('cameraY');
+	var cameraZ = gui.add( params, 'cameraZ', -5000, 5000 ).name('cameraZ');
 	var cameraRotX = gui.add( params, 'cameraRotX', -Math.PI * 2, Math.PI * 2 ).name('cameraRotX');
 	var cameraRotY = gui.add( params, 'cameraRotY', -Math.PI * 2, Math.PI * 2 ).name('cameraRotY');
 	var cameraRotZ = gui.add( params, 'cameraRotZ', -Math.PI * 2, Math.PI * 2 ).name('cameraRotZ');
