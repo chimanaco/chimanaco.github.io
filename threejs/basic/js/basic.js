@@ -93,10 +93,21 @@ function init() {
 	container = document.getElementById( 'threeJs' );
 	container.appendChild( renderer.domElement );
 
+	var light	= new THREE.AmbientLight( 0x444444 );
+	scene.add( light );			
+
+	var light	= new THREE.DirectionalLight( 0xff8000, 1.5 );
+	light.position.set( 1, 0, 1 ).normalize();
+	scene.add( light );
+	
+	var light	= new THREE.DirectionalLight( 0xff8000, 1.5 );
+	light.position.set( -1, 1, 0 ).normalize();
+	scene.add( light );
+	
 	// stats
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
-	stats.domElement.style.top = '0px';
+	stats.domElement.style.bottom = '0px';
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
 
