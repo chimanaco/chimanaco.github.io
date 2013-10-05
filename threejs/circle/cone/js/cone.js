@@ -23,6 +23,8 @@ var c = new THREE.Color(0xffffff);
 var hue = 0;
 var hueSpeed = 1 / MAX;
 
+var simplexNoise = new SimplexNoise;
+
 /* ------------------------------------
 	setup
 ------------------------------------*/
@@ -54,6 +56,7 @@ function draw() {
 
 	for(var i = 0; i < len; i++) {
 	    particles.children[i].position.y = Math.sin((frame + (360 / MAX) * i) * params.speed) * params.height;
+	    // particles.children[i].position.y = Math.sin((frame + (360 / MAX) * i) * params.speed) * params.height * simplexNoise.noise(i * 0.1, 100);
 	    // r = Math.random() * 256 / 256;
   	    particles.children[i].scale.set(r, r, r);
 	}
@@ -73,6 +76,8 @@ function draw() {
 function addParticle(num) {
 	// draw circle
 	var amplitude = num + 1;
+	// var amplitude = simplexNoise.noise(num * 0.1, 100) * MAX;
+	console.log(amplitude);
 	var geometry = new THREE.Geometry();
 	for(var i = 0; i <= RESOLUTION; i++) {
 	    var segment = ( i * SIZE ) * Math.PI / 180;

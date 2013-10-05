@@ -1,7 +1,7 @@
 /*
 	for dat.GUI:
-	davidedc/using-dat-gui-with-processing-js
-	https://github.com/davidedc/using-dat-gui-with-processing-js
+	dat-gui - A lightweight controller library for JavaScript.
+	https://code.google.com/p/dat-gui/
 
 */
 
@@ -14,9 +14,9 @@ var params =
 	speed: 0.03,
 	groupRotX: 0.5,
 	groupRotY: 0.5,
-	groupRotZ: 0.0,
+	groupRotZ: 0.5,
 	height: 300,
-	radius: 2//,
+	radius: 10//,
 	// resolution: 256
 };
 
