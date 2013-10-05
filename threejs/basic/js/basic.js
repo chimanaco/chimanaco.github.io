@@ -53,16 +53,13 @@ function setup() {
 ------------------------------------*/
 
 function draw() {
-	
-	// camera
-	camera.rotation.x = params.cameraRotX;
-	camera.rotation.y = params.cameraRotY;
-	camera.rotation.z = params.cameraRotZ;
-
 	// group
-	group.rotation.x = Date.now() * params.speedX / 1000;
-	group.rotation.y = Date.now() * params.speedY / 1000;
-	group.rotation.z = Date.now() * params.speedZ / 1000;
+	// group.rotation.x = Date.now() * params.speedX / 1000;
+	// group.rotation.y = Date.now() * params.speedY / 1000;
+	// group.rotation.z = Date.now() * params.speedZ / 1000;
+	group.rotation.x += params.groupRotX * 0.01;
+	group.rotation.y += params.groupRotY * 0.01;
+	group.rotation.z += params.groupRotZ * 0.01;
 	
 	// rendering & updating
 	requestAnimationFrame( draw );
