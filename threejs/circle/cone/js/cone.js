@@ -23,7 +23,7 @@ var c = new THREE.Color(0xffffff);
 var hue = 0;
 var hueSpeed = 1 / MAX;
 
-var simplexNoise = new SimplexNoise;
+// var simplexNoise = new SimplexNoise;
 
 /* ------------------------------------
 	setup

@@ -2,7 +2,6 @@
 	for dat.GUI:
 	dat-gui - A lightweight controller library for JavaScript.
 	https://code.google.com/p/dat-gui/
-
 */
 
 var params = 

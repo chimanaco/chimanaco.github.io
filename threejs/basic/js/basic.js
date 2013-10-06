@@ -1,6 +1,6 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 		
-var camera, scene, renderer, stats, info;
+var container, camera, scene, renderer, stats, info;
 var keyboard;
 var W, H;
 var group;
