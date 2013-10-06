@@ -1,6 +1,6 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 		
-var camera, scene, renderer, stats;
+var camera, scene, renderer, stats, info;
 var keyboard;
 var W, H;
 var group;
@@ -60,7 +60,7 @@ function draw() {
 	group.rotation.x += params.groupRotX * 0.01;
 	group.rotation.y += params.groupRotY * 0.01;
 	group.rotation.z += params.groupRotZ * 0.01;
-	
+
 	// rendering & updating
 	requestAnimationFrame( draw );
 	renderer.render( scene, camera );
@@ -76,6 +76,7 @@ function init() {
 	
 	// renderer
 	renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor(0xFFFFFF, 1);
 	// renderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
 	// renderer.autoClearColor = false;
 	renderer.setSize( W, H );
@@ -108,13 +109,35 @@ function init() {
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
 
+	// info
+	info = document.getElementById( 'info' );
+
 	// events
 	keyboard = new THREEx.KeyboardState();
-	THREEx.WindowResize(renderer, camera);
+	window.addEventListener( 'resize', onWindowResize, false );
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
 
 	// GUI
 	setupGUI();
+}
+
+/* ------------------------------------
+	window resize
+------------------------------------*/
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+	// toggle info
+	if(document.webkitIsFullScreen || document.mozFullScreen) {
+		info.style.display = "none";
+	} else {
+		info.style.display = "block";
+		console.assert(false);
+	}
+
 }
 
 /* ------------------------------------
