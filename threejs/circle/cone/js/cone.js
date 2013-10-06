@@ -126,17 +126,35 @@ function init() {
 	// stats
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
-	stats.domElement.style.top = '0px';
+	stats.domElement.style.bottom = '0px';
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
 
 	// events
 	keyboard = new THREEx.KeyboardState();
-	THREEx.WindowResize(renderer, camera);
+	window.addEventListener( 'resize', onWindowResize, false );
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
 
 	// GUI
 	setupGUI();
+}
+
+/* ------------------------------------
+	window resize
+------------------------------------*/
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+	// toggle info
+	if(document.webkitIsFullScreen || document.mozFullScreen) {
+		info.style.display = "none";
+	} else {
+		info.style.display = "block";
+		console.assert(false);
+	}
 }
 
 /* ------------------------------------

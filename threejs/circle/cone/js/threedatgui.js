@@ -43,5 +43,5 @@ function setupGUI() {
 	cameraY.onChange(function() { resetCamera() });
 	cameraZ.onChange(function() { resetCamera() });
 	
-	gui.open();	
+	gui.close();	
 }

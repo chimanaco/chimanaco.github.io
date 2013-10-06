@@ -96,7 +96,7 @@ function init() {
 	
 	// renderer
 	renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor(0xFFFFFF, 1);
+	renderer.setClearColor(0x000000, 1);
 	// renderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
 	// renderer.autoClearColor = false;
 	renderer.setSize( W, H );

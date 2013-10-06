@@ -35,5 +35,5 @@ function setupGUI() {
 	groupRotY.onChange(function() { restart() });
 	groupRotZ.onChange(function() { restart() });
 
-	gui.open();	
+	gui.close();	
 }

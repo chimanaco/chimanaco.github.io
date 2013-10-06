@@ -25,5 +25,5 @@ function setupGUI() {
 
 	fov.onChange(function() { restart() });
 
-	gui.open();	
+	gui.close();	
 }
