@@ -23,8 +23,8 @@ img { border: none }
 
 #info {
     position:absolute;
-    top: 10px;
-    left: 10px;
+    top: 0;
+    left: 0;
     width: 400px;
     z-index: 200;
     background-color: rgba(255, 255, 255, 0.9);
@@ -33,7 +33,7 @@ img { border: none }
 
 #info ul {
     margin: 0;
-    padding: 0;
+    padding: 10px;
     display: block;
     list-style: none;
 }
@@ -71,4 +71,5 @@ body#bgBlack {
 
 #bgBlack #info {
     background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
 }

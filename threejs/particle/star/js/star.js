@@ -17,7 +17,7 @@
 
 // standard
 var container, scene, camera, renderer, controls, stats;
-var keyboard = new THREEx.KeyboardState();
+var keyboard;
 var clock = new THREE.Clock();
 
 // custom
@@ -71,8 +71,10 @@ function setup() {
     scene.add(skyBox);
 
     // Events
-	THREEx.WindowResize(renderer, camera);
+    keyboard = new THREEx.KeyboardState();
+	window.addEventListener( 'resize', onWindowResize, false );
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
+	
 	// Controls
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	
@@ -127,6 +129,25 @@ function restartEngine(parameters) {
 	engine = new ParticleEngine();
 	engine.setValues( parameters );
 	engine.initialize();
+}
+
+/* ------------------------------------
+	window resize
+------------------------------------*/
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+	// toggle info
+	if(document.webkitIsFullScreen || document.mozFullScreen) {
+		info.style.display = "none";
+	} else {
+		info.style.display = "block";
+		console.assert(false);
+	}
+
 }
 
 /* ////////////////////////////
