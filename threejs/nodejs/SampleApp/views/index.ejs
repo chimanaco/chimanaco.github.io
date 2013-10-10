@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Twitter × Node.js feat. socket.io</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:3000');
+      socket.on('message', function(t){
+        $('<div></div>')
+          .html('<li>' + t + '</li>')
+          .prependTo('#tweets');
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Twitter × Node.js feat. socket.io</h1>
+    <form id="frm" name="frm" method="GET" action="/">
+    <input type="text" id="keyword" name="keyword" value="<%=keyword %>">
+    に関する<input type="submit" id="search" name="search" value="ツイートを眺める">
+    </form>
+    <ul>
+    <div id="tweets"></div>
+    </ul>
+  </body>
+</html>
