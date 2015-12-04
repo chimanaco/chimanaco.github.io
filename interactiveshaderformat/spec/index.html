@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)http://www.interactiveshaderformat.com/spec -->
+<html><script type="text/javascript" src="assets/942d92a9fc"></script><script src="assets/nr-768.min.js"></script><script>(function main() {
+    // Create enabled event
+    function fireEnabledEvent() {
+        // If gli exists, then we are already present and shouldn't do anything
+        if (!window.gli) {
+            setTimeout(function () {
+                var enabledEvent = document.createEvent("Event");
+                enabledEvent.initEvent("WebGLEnabledEvent", true, true);
+                document.dispatchEvent(enabledEvent);
+            }, 0);
+        } else {
+            //console.log("WebGL Inspector already embedded on the page - disabling extension");
+        }
+    };
+
+    // Grab the path root from the extension
+    document.addEventListener("WebGLInspectorReadyEvent", function (e) {
+        var pathElement = document.getElementById("__webglpathroot");
+        if (window["gliloader"]) {
+            gliloader.pathRoot = pathElement.innerText;
+        } else {
+            // TODO: more?
+            window.gliCssUrl = pathElement.innerText + "gli.all.css";
+        }
+    }, false);
+
+    // Rewrite getContext to snoop for webgl
+    var originalGetContext = HTMLCanvasElement.prototype.getContext;
+    if (!HTMLCanvasElement.prototype.getContextRaw) {
+        HTMLCanvasElement.prototype.getContextRaw = originalGetContext;
+    }
+    HTMLCanvasElement.prototype.getContext = function () {
+        var ignoreCanvas = this.internalInspectorSurface;
+        if (ignoreCanvas) {
+            return originalGetContext.apply(this, arguments);
+        }
+
+        var result = originalGetContext.apply(this, arguments);
+        if (result == null) {
+            return null;
+        }
+
+        var contextNames = ["moz-webgl", "webkit-3d", "experimental-webgl", "webgl", "3d"];
+        var requestingWebGL = contextNames.indexOf(arguments[0]) != -1;
+        if (requestingWebGL) {
+            // Page is requesting a WebGL context!
+            fireEnabledEvent(this);
+
+            // If we are injected, inspect this context
+            if (window.gli) {
+                if (gli.host.inspectContext) {
+                    // TODO: pull options from extension
+                    result = gli.host.inspectContext(this, result);
+                    // NOTE: execute in a timeout so that if the dom is not yet
+                    // loaded this won't error out.
+                    window.setTimeout(function() {
+                        var hostUI = new gli.host.HostUI(result);
+                        result.hostUI = hostUI; // just so we can access it later for debugging
+                    }, 0);
+                }
+            }
+        }
+
+        return result;
+    };
+})();</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"942d92a9fc","applicationID":"4789581","transactionName":"cw4NFhFWD14BQhwLDV0ETBETXAA=","queueTime":4,"applicationTime":11,"agentToken":null,"agent":"js-agent.newrelic.com/nr-768.min.js"}</script>
+<script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({QJf3ax:[function(e,n){function t(e){function n(n,t,a){e&&e(n,t,a),a||(a={});for(var u=c(n),f=u.length,s=i(a,o,r),p=0;f>p;p++)u[p].apply(s,t);return s}function a(e,n){f[e]=c(e).concat(n)}function c(e){return f[e]||[]}function u(){return t(n)}var f={};return{on:a,emit:n,create:u,listeners:c,_events:f}}function r(){return{}}var o="nr@context",i=e("gos");n.exports=t()},{gos:"7eSDFh"}],ee:[function(e,n){n.exports=e("QJf3ax")},{}],3:[function(e,n){function t(e){return function(){r(e,[(new Date).getTime()].concat(i(arguments)))}}var r=e("handle"),o=e(1),i=e(2);"undefined"==typeof window.newrelic&&(newrelic=window.NREUM);var a=["setPageViewName","addPageAction","setCustomAttribute","finished","addToTrace","inlineHit","noticeError"];o(a,function(e,n){window.NREUM[n]=t("api-"+n)}),n.exports=window.NREUM},{1:12,2:13,handle:"D5DuLP"}],gos:[function(e,n){n.exports=e("7eSDFh")},{}],"7eSDFh":[function(e,n){function t(e,n,t){if(r.call(e,n))return e[n];var o=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:o,writable:!0,enumerable:!1}),o}catch(i){}return e[n]=o,o}var r=Object.prototype.hasOwnProperty;n.exports=t},{}],D5DuLP:[function(e,n){function t(e,n,t){return r.listeners(e).length?r.emit(e,n,t):void(r.q&&(r.q[e]||(r.q[e]=[]),r.q[e].push(n)))}var r=e("ee").create();n.exports=t,t.ee=r,r.q={}},{ee:"QJf3ax"}],handle:[function(e,n){n.exports=e("D5DuLP")},{}],XL7HBI:[function(e,n){function t(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:i(e,o,function(){return r++})}var r=1,o="nr@id",i=e("gos");n.exports=t},{gos:"7eSDFh"}],id:[function(e,n){n.exports=e("XL7HBI")},{}],G9z0Bl:[function(e,n){function t(){var e=d.info=NREUM.info,n=f.getElementsByTagName("script")[0];if(e&&e.licenseKey&&e.applicationID&&n){c(p,function(n,t){n in e||(e[n]=t)});var t="https"===s.split(":")[0]||e.sslForHttp;d.proto=t?"https://":"http://",a("mark",["onload",i()]);var r=f.createElement("script");r.src=d.proto+e.agent,n.parentNode.insertBefore(r,n)}}function r(){"complete"===f.readyState&&o()}function o(){a("mark",["domContent",i()])}function i(){return(new Date).getTime()}var a=e("handle"),c=e(1),u=window,f=u.document;e(2);var s=(""+location).split("?")[0],p={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-768.min.js"},d=n.exports={offset:i(),origin:s,features:{}};f.addEventListener?(f.addEventListener("DOMContentLoaded",o,!1),u.addEventListener("load",t,!1)):(f.attachEvent("onreadystatechange",r),u.attachEvent("onload",t)),a("mark",["firstbyte",i()])},{1:12,2:3,handle:"D5DuLP"}],loader:[function(e,n){n.exports=e("G9z0Bl")},{}],12:[function(e,n){function t(e,n){var t=[],o="",i=0;for(o in e)r.call(e,o)&&(t[i]=n(o,e[o]),i+=1);return t}var r=Object.prototype.hasOwnProperty;n.exports=t},{}],13:[function(e,n){function t(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(0>o?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=t},{}]},{},["G9z0Bl"]);</script>
+<title>
+Interactive Shader Format
+</title>
+<link href="assets/application-7c8bd26c7a892dd8a48a24e0fce202eb.css" media="all" rel="stylesheet">
+<script src="assets/common-05e3223b43199539b2a8b0e47116ef98.js"></script><style type="text/css"></style>
+<meta content="authenticity_token" name="csrf-param">
+<meta content="aiJ6L5XU3ux+2MovAzb/CQ3sE4ASrNtkEujhEGxXfak=" name="csrf-token">
+
+</head>
+<body class="" data-pinterest-extension-installed="cr1.39.1" data-feedly-mini="yes">
+<div class="top-strip">
+<div class="cell root bright-hover">
+<a href="http://www.interactiveshaderformat.com/">ISF</a>
+</div>
+<div class="cell bright-hover">
+<a href="http://www.interactiveshaderformat.com/popular">Popular</a>
+</div>
+<div class="cell bright-hover">
+<a href="http://www.interactiveshaderformat.com/newest">Newest</a>
+</div>
+<div class="cell bright-hover">
+<a href="http://www.interactiveshaderformat.com/categories">Categories</a>
+</div>
+<a class="cell bright-hover search-icon pointer" href="http://www.interactiveshaderformat.com/search">Search</a>
+<div class="cell grow"></div>
+<div class="cell bright-hover">
+<a href="http://www.interactiveshaderformat.com/u/chimanaco">Yasushi Harada</a>
+</div>
+</div>
+
+<div class="informational">
+<h2>The ISF "Specification"</h2>
+
+<p>This page is a reference for the details of the specification for ISF files.</p>
+
+<hr>
+
+<h2>Downloads and Links</h2>
+
+<p>Test and Tutorial Filters: <strong><a href="http://vidvox.net/rays_oddsnends/ISF%20tests+tutorials.zip">ISF Test/Tutorial Filters</a></strong></p>
+
+<p><em>(...you will probably learn more, faster, from the examples than you'll get by reading this document: each example describes a single aspect of the ISF file format, and they're extremely handy for testing, reference, or as a tutorial).</em></p>
+
+<p>The ISF Editor:
+<strong><a href="http://vidvox.net/rays_oddsnends/ISF_Editor_2.3.zip">ISF Editor v2.3</a></strong>  (OS X 10.10+)</p>
+
+<p><em>(This app can be used to create and test your ISF generator and FX files on the Mac.  Also includes the ability to send / receive from Syphon, export generators as movie files, import from GLSL Sandbox / Shadertoy and useful debugging features)</em></p>
+
+<p>The Book of Shaders is another great online resource for learning GLSL: <strong><a href="http://www.movecraft.com/the-book-of-shaders-ifsvdmx-translation/">Book of Shaders (ISF Translation)</a></strong></p>
+
+<hr>
+
+<h2>The ISF File</h2>
+
+<p>Each ISF file are two sections.  At the top, a JSON Dictionary describes the variables and other information used by a host application when compiling the shader.  Below that is your GLSL code that is used to generate or process incoming video frames.</p>
+
+<p>When creating an ISF file make sure to use an <strong>.fs</strong> file extension.</p>
+
+<h3>The Fragment Shader (.fs) GLSL Code</h3>
+
+<p>Below the JSON dictionary you can place your GLSL code.</p>
+
+<p>Typically a simple generator will this will look something like:</p>
+
+<pre><code>void main() {
+    //  create a color variable that contains red with alpha 1.0
+    vec4        inputPixelColor = vec(1.0,0.0,0.0,1.0);
+    //  set the color for this pixel to our variable to output red
+    gl_FragColor = inputPixelColor;
+}
+</code></pre>
+
+<p>and a simple pass-thru FX might look something like this:</p>
+
+<pre><code>void main() {
+    //  declare and initialize our return variable
+    vec4        inputPixelColor = vec4(0.0);
+    //  get this pixel coordinate in pixel coordinates
+    vec2        pixelLocation = gl_FragCoord.xy;
+    //  use the IMG_PIXEL function to get the color from the inputImage for this pixelLocation
+    inputPixelColor = IMG_PIXEL(inputImage, pixelLocation);
+    //  set the return color to our variable
+    gl_FragColor = inputPixelColor;
+}
+</code></pre>
+
+<p>This GLSL code can also reference any of the float, bool, long, point2D, color or image uniform variables you've defined in the JSON Dictionary section of the shader.</p>
+
+<p><em>Tip: When creating ISF files that are FX make sure to include an input of type image with the name "<code>inputImage</code>" where the host application will provide video frames to be processed.</em></p>
+
+<h3>The JSON Dictionary</h3>
+
+<p>At the top of an ISF file needs to be a comment (delineated using "/<em>" and "</em>/") section containing a JSON dict.  If the comment doesn't exist- or the JSON dict is malformed or can't be parsed- your ISF file can't be loaded (ISF files can be tested with the test app linked to elsewhere on this page).  This JSON dict is referred to as your "top-level dict" throughout the rest of this document.</p>
+
+<p>An example of a simple JSON Dictionary with a single floating number input might look like:</p>
+
+<pre><code>/*{
+    "DESCRIPTION": "The description for this ISF file",
+    "CREDIT": "Carter Rosenberg",
+    "CATEGORIES": [
+        "Generator"
+    ],
+    "INPUTS": [
+        {
+            "NAME": "testFloat",
+            "Label": "my float name",
+            "TYPE": "float",
+            "DEFAULT": 0.5,
+            "MIN": 0.0,
+            "MAX": 1.0
+        }
+    ]
+}*/
+</code></pre>
+
+<p>The full list of tags that can be found in the JSON Dictionary are:</p>
+
+<ul>
+<li><p><code>DESCRIPTION</code>: If there's a string in the top-leve dict stored for this key, this string will be displayed as a description associated with this filter in the host app.  The use of this key is optional.</p></li>
+<li><p><code>CATEGORIES</code>: This key in your top-level dict should store an array of strings.  The strings are the category names you want the filter to appear in (assuming the host app displays categories).</p></li>
+<li><p><code>INPUTS</code>: This key section of your top-level dict should store an array of dictionaries (each dictionary describes a different input- the inputs should appear in the host app in the order they're listed in this array).  For each input dictionary:</p>
+
+<ul>
+<li>The value stored with the key <code>NAME</code> must be a string, and it must not contain any whitespaces.  This is the name of the input, and will also be the variable name of the input in your shader.</li>
+<li>The value stored with the key <code>TYPE</code> must be a string.  This string describes the type of the input, and must be one of the following: <code>event</code>, <code>bool</code>, <code>long</code>, <code>float</code>, <code>point2D</code>, <code>color</code>, or <code>image</code>.</li>
+<li>Where appropriate, <code>DEFAULT</code>, <code>MIN</code>, <code>MAX</code>, and <code>IDENTITY</code> may be used to further describe value attributes of the input.  Note that "image"-type inputs don't have any of these, and that "color"-type inputs use an array of floats to describe min/max/default colors.  Everywhere else values are stored as native JSON values where possible (float as float, bool as bool, etc).</li>
+<li>The value stored with the key <code>LABEL</code> must be a string.  This key is optional- the "NAME" of an input is the variable name, and as such it can't contain any spaces/etc.  The "LABEL" key provides host sofware with the opportunity to display a more human-readable name.  This string is purely for display purposes and isn't used for processing at all.</li>
+<li>Other notes:</li>
+<li>"event" type inputs describe events that do not have an associated value- a momentary click button.</li>
+<li>The "long" type input is used to implement pop-up buttons/pop-up menus in the host UI.  As such, "long"-type input dictionaries have a few extra keys:
+
+<ul>
+<li>The <code>VALUES</code> key stores an array of integer values.  This array may have repeats, and the values correspond to the labels.  When you choose an item from the pop-up menu, the corresponding value from this array is sent to your shader.</li>
+<li>The <code>LABELS</code> key stores an array of strings.  This array may have repeats, and the strings/labels correspond to the array of values.</li>
+</ul></li>
+</ul></li>
+<li><p><code>PERSISTENT_BUFFERS</code>: This key describes persistent buffers: these are buffers that will stay with your effect until it's deleted, and are used to share image data between rendering passes <em>and between different frames of output</em>.  The object at this key needs to be an array.</p>
+
+<ul>
+<li>Every item in the "PERSISTENT_BUFFERS" array must be a string.  This string is the name of the persistent buffer in your shader- the point of this array is to define a list of which of the buffers rendered into during one of the passes are persistent.  The properties of the buffers themselves (such as their names and dimensions) are defined in a "PASSES" dict.  If you ask the filter to render a frame at a different resolution, persistent buffers are resized to accommodate.</li>
+<li><em>This key is optional: you don't need to include it if no buffering of video frames is needed.</em></li>
+</ul></li>
+<li><p><code>PASSES</code>: This key should store an array of dictionaries.  Each dictionary describes a different rendering pass.</p>
+
+<ul>
+<li>If one of the dicts in "PASSES" has a string stored at the key <code>TARGET</code>, this string describes the name of the buffer this pass should render into.  If you want the contents of this buffer to be persistent, add its name to the "PERSISTENT_BUFFERS" array.  Alternately, you could make up a different name and put it here- the ISF host will automatically create a temporary buffer using this name, and you can read the pixels from this temporary buffer back in your shader in a subsequent rendering pass.  Temporary buffers are deleted (or returned to a buffer pool) after the ISF file has finished rendering a frame of output (only persistent buffers last between frames).</li>
+<li>If the buffer dictionary has a value for the keys <code>WIDTH</code> or <code>HEIGHT</code>, that value is expected to be a string with a value or an equation describing the width/height of the buffer.  This equation may reference variables: the width and height of the image requested from this filter are passed to the equation as <code>$WIDTH</code> and <code>$HEIGHT</code>, and the value of any other inputs declared in "INPUTS" can also be passed to this equation (for example, the value from the float input "blurAmount" would be represented in an equation as <code>$blurAmount</code>).  This equation is evaluated once per frame, when you initially pass the filter a frame (it's not evaluated multiple times if the ISF file describes multiple rendering passes to produce a sigle frame).  For more information (constants, built-in functions, etc) on math expression evaluations, please see the documentation for the excellent <a href="https://github.com/davedelong/DDMathParser">DDMathParser by Dave DeLong</a>, which is what we're presently using.</li>
+<li>If the buffer dictionary has a boolean "true" for the key <code>FLOAT</code>, a high-resolution buffer will be used (32-bit float per channel RGBA instead of the usual 8-bit per channel RGBA).  Buffers with high bit-depths take longer to write to and consume more VRAM, but their significantly higher accuracy is extremely useful, particularly when working with accumulators/persistence filters, masks, histograms, and any situation where you want to use buffers as a way to store persistent variables or values across frames.  In particular, this makes it easy to store values in textures/persistent buffers in one render pass, and then read those values in later passes (or later frames- persistent buffers last across multiple frames!).</li>
+<li><em>This key is optional: you don't need to include it, and if it's not present your effect will be assumed to be single-pass.</em></li>
+</ul></li>
+<li><p><code>IMPORTED</code>: This key should store an array of dictionaries.  Each dictionary describes an image file you want ISF to automatically import.  Each dict in the "IMPORTED" array has the following structure:</p>
+
+<ul>
+<li>The <code>NAME</code> key of an import dict stores the variable name of the imported image.  This key is necessary- the "NAME" is what you'd pass to one of the IMG_PIXEL() functions to retrieve the color of a pixel from that image, and is required for operation.</li>
+<li>The <code>PATH</code> key of an import dict stores a string describing the path to the image file relative to the ISF file being evaluated.  For example, a file named "asdf.jpg" in the same folder as the ISF file would have the PATH "asdf.jpg", or "./asdf.jpg" (both describe the same location).  If the jpg were located in your ISF file's parent directory, its PATH would be "../asdf.jpg", etc.</li>
+<li><em>This key is optional.</em></li>
+</ul></li>
+</ul>
+
+<p><em>Tip: When creating a new ISF file from the ISF Editor a template JSON Dictionary is created that includes one of each key type as a starting point.</em></p>
+
+<hr>
+
+<h2>Special ISF Variables, Functions and Advanced Features</h2>
+
+<p>The ISF specification includes several automatically created variables, special functions and advanced features that allow for the creation of complex generators and FX that would be difficult or impossible to implement in a single shader.</p>
+
+<h3>Automatic ISF Variables</h3>
+
+<ul>
+<li><code>uniform</code> variables of the appropriate type are automatically declared for any INPUTS you define in the JSON dictionary.  You shouldn't declare uniform variables you want ISF to create UI items for- if you do this, your shader won't work (and the error displayed in the ISF test app will indicate that you've redeclared a variable).  "uniform" samplers are also declared for any persistent or temporary buffers (samplers are automatically declared of the appropriate type- the shader will be recompiled behind the scenes if a texture type for any of the textures in use changes).</li>
+<li><code>PASSINDEX</code>: This uniform int is automatically declared, and set to 0 on the first rendering pass.  Subsequent passes (defined by the dicts in your "PASSES" array) increment this int.</li>
+<li><code>RENDERSIZE</code>: This uniform vec2 is automatically declared, and is set to the rendering size (in pixels) of the current rendering pass.</li>
+<li><code>vv_FragNormCoord</code>: This uniform vec2 is automatically declared.  This is a convenience variable, and repesents the normalized coordinates of the current fragment ([0,0] is the bottom-left, [1,1] is the top-right).</li>
+<li><code>TIME</code>: This uniform float is automatically declared, and is set to the current rendering time (in seconds) of the shader.  This variable is updated once per rendered frame- if a frame requires multiple rendering passes, the variable is only updated once for all the passes.</li>
+<li><code>image</code>-type inputs automatically declare other additions uniform vars (for passing the image resolution and other associated properties)- if you want to see these, just use the "ISF Editor" app listed above to view the fragment shader source of your filter.</li>
+</ul>
+
+<h3>ISF Functions</h3>
+
+<p>Since ISF is based on GLSL, any function or pre-defined constants from GLSL will work in your shaders.</p>
+
+<p>There are really only two special functions for ISF worth mentioning: <code>IMG_PIXEL()</code> and <code>IMG_NORM_PIXEL()</code>, which fetch the color of a pixel in an image using either pixel-based coords or normalized coords, respectively.  Those already familiar with GLSL will note that these should be used <em>instead of</em> texture2D() or texture2DRect().</p>
+
+<p><strong>vec4</strong> pixelColor = <code>IMG_PIXEL</code>(<strong>image</strong> <em>imageName</em>, <strong>vec2</strong> <em>pixelCoord</em>); </p>
+
+<p><strong>vec4</strong> pixelColor = <code>IMG_NORM_PIXEL</code>(<strong>image</strong> <em>imageName</em>, <strong>vec2</strong> <em>normalizedPixelCoord</em>);</p>
+
+<p>In both functions, "<em>imageName</em>" refers to the variable name of the image you want to work with.</p>
+
+<h3>Persistent Buffers</h3>
+
+<p>ISF files can define persistent buffers.  These buffers are images (GL textures) that stay with the ISF file for as long as it exists.  This is useful if you want to "build up" an image over time- you can repeatedly query and update the contents of persistent buffers by rendering into them- or if you want to perform calculations across the entire image, storing the results somewhere for later evaluation.  Details on exactly how to do this are in the JSON Dictionary section above.</p>
+
+<h3>Multiple Rendering Passes, Rendering to Buffers</h3>
+
+<p>The ISF file format defines the ability to execute a shader multiple times in the process of rendering a frame for output- each time the shader's executed (each pass), the uniform int variable <code>PASSINDEX</code> is incremented.  Details on how to accomplish this are described below in the JSON Dictionary section above, but the basic process involves adding an array of dicts to the <code>PASSES</code> key in your top-level JSON dict.  Each dict in the "PASSES" array describes a different rendering pass (each dict describes the name of the buffer it should render into- you can render into a persistent buffer, or you can make up a new name, and the ISF host will create a new temporary buffer to render into (after you render into it you can read from the temp buffer again in subsequent render passes like any other buffer/input image/imported image, but the buffer will be deleted once ISF has finished rendering a frame).</p>
+
+<p>A simple test shader that makes use of shader that has two render passes might look like this:</p>
+
+<pre><code>void main() {
+    //  declare and initialize our return variable
+    vec4        inputPixelColor = vec(0.0,0.0,0.0,1.0);
+
+    //  if this is pass index 0, set to red
+    if (PASSINDEX==0)
+        inputPixelColor = vec(1.0,0.0,0.0,1.0);
+    //  if this is pass index 1, set to green
+    else if (PASSINDEX==1)
+        inputPixelColor = vec(0.0,1.0,0.0,1.0);
+
+    //  set the color for this pixel to our variable
+    gl_FragColor = inputPixelColor;
+}
+</code></pre>
+
+<p>Tip: When using the ISF Editor application you can switch which render pass is currently being previewed from the output window.</p>
+
+<h3>Including An Optional Vertex (.vs) Shader</h3>
+
+<p>If no vertex shader is provided for an ISF file, a default vertex shader is used during rendering.  If you wish to include your own vertex shader (.vs) file, it can take advantage of accessing uniform variables declared in its matching .fs JSON dictionary.</p>
+
+<p>The default vertex shader that is used looks like this and can be used as a starting point for creating your own when needed:</p>
+
+<pre><code>void main()
+{
+    //  make sure to call this from your ISF based vertex shader
+    vv_vertShaderInit();
+}
+</code></pre>
+
+<hr>
+
+<h2>Tips For Converting Existing GLSL Shaders to ISF</h2>
+
+<p>Many GLSL shaders that are written for desktop and WebGL can be made to work as ISF files, usually with a few minor changes to the code and the addition of a JSON Dictionary at the top.</p>
+
+<ul>
+<li>You should probably replace any calls in your shader to texture2D() or texture2DRect() with IMG<em>NORM</em>PIXEL() or IMG<em>PIXEL(), respectively.  Images in ISF- inputs, persistent buffers, etc- can be accessed by either IMG</em>NORM<em>PIXEL() or IMG</em>PIXEL(), depending on whether you want to use normalized or non-normalized coordinates to access the colors of the image.  If your shader isn't using these- if it's using texture2D() or texture2DRect()- it won't compile if the host application tries to send it a different type of texture.</li>
+<li>Many shaders pass in the resolution of the image being rendered (knowing where the fragment being evaluated is located within the output image is frequently useful).  By default, ISF automatically declares a uniform vec2 named "RENDERSIZE" which is passed the dimensions of the image being rendered.</li>
+<li>If the shader you're converting requires a time value, note that the uniform float "TIME" is declared, and passed the duration (in seconds) which the shader's been runing when the shader's rendered.</li>
+<li>Many shaders don't use (or even acknowledge) the alpha channel of the image being rendered.  There's nothing wrong with this- but when the shader's loaded in an application that uses the alpha channel, the output of the shader can look bizarre and unpredictable (though it usually involves something being darker than it should be).  If you run into this, try setting gl_FragColor.a to 1.0 at the end of your shader.</li>
+<li>gl<em>FragCoord.xy contains the coordinates of the fragment being evaluated.  vv</em>FragNormCoord.xy contains the normalized (0.0 to 1.0) coordinates of the fragment being evaluated.</li>
+<li>While ISF files are fragment shaders, and the host environment automatically generates a vertex shader, you can use your own vertex shader if you'd like.  If you go this route, your vertex shader should have the same base name as your ISF file (just use the extension .vs), and the first thing you do in your vertex shader's main function is call "vv_verteShaderInit();".</li>
+<li>If the shader you're converting requires imported graphic resources, note that the ISF format defines the ability to import image files by adding objects to your JSON dict under the "IMPORTED" key.  The imported images are accessed via the usual IMG<em>PIXEL() or IMG</em>NORM_PIXEL() methods.  Details on how to do this are listed above, and examples are included in the tutorials download.</li>
+<li>Error messages that occur when a host application tries to compile an ISF file may appear in the Console logs on your computer.  These can be useful when trying to debug code.  The ISF Editor will also show these error messages if a file fails to load properly.</li>
+<li>If your texture doesn't look right, make sure your texture coordinates are ranged properly (textures are typically "clamped" by the host implementation, if you specify an out-of-range texture coordinate it may look funny).</li>
+<li>The ISF Editor can import some shaders from shadertoy.com and glslsandbox.com sites using options in the File menu.</li>
+<li>The Gen GLSL generator from Cycling74 can <a href="https://cycling74.com/wiki/index.php?title=Gen_Code_Export_ISF">export to ISF files</a>.</li>
+</ul>
+
+<hr>
+
+<h2>Adding Support For ISF To Other Applications</h2>
+
+<p>For developers who wish to add support for ISF in their own applications, there are a few existing opensource frameworks that can be used either directly in your own software or as a starting point for creating your own implementation.</p>
+
+<ul>
+<li>The official Mac OS X ISF implementation created for VDMX and the ISF Editor application can be found in the <a href="https://github.com/mrRay/vvopensource">VVOpensource / VVISFKit framework</a> on GitHub.  This framework is free to use.</li>
+<li>The Javascript / WebGL implementation used for this website can be found in the <a href="https://github.com/msfeldstein/interactive-shader-format-js">interactive-shader-format-js</a> GitHub repository and is also free to use.</li>
+<li>An add-on for openFrameworks, <a href="https://github.com/satoruhiga/ofxISF">ofxISF</a>.</li>
+</ul>
+
+</div>
+
+<div class="simple-popup-scrim" style="display: none">
+<div class="simple-popup-content"></div>
+</div>
+
+<script>
+  window.currentUser = {"id":12,"username":"chimanaco","provider":"twitter","uid":"5825042","name":"Yasushi Harada","image":"http://res.cloudinary.com/hrlz5rsqo/image/fetch/http://pbs.twimg.com/profile_images/1495889394/_____-1.png","admin":null,"created_at":"2015-01-04T23:25:26.186Z","updated_at":"2015-01-04T23:25:26.186Z","email":null}
+</script>
+<div id="feedly-mini" title="feedly Mini tookit"></div><span id="buffer-extension-hover-button" style="display: none;position: absolute;z-index: 8675309;width: 100px;height: 25px;background-image: url(chrome-extension://noojglkidnpfjbincgijbaiedldjfbhh/data/shared/img/buffer-hover-icon@2x.png);background-size: 100px 25px;opacity: 0.9;cursor: pointer;"></span></body></html>
